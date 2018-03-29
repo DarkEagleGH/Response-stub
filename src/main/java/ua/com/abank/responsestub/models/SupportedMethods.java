@@ -14,11 +14,11 @@ public enum SupportedMethods {
         this.methodName = methodName;
     }
 
-    public String toString() {
-        return this.methodName;
-    }
-
     public static SupportedMethods byName(String methodName) {
         return SupportedMethods.valueOf(methodName.toUpperCase());
+    }
+
+    public String toString() {
+        return this.methodName;
     }
 }
