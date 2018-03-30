@@ -5,22 +5,36 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.com.abank.responsestub.config.Config;
+import ua.com.abank.responsestub.config.Mapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class CustomController {
+
     private Config config;
 
     public CustomController(Config config) {
         this.config = config;
     }
 
-    @RequestMapping("/ffff")
-    public ResponseEntity getResponse(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println(request.getRequestURI());
-        System.out.println(config.toString());
-        return new ResponseEntity(HttpStatus.valueOf(200));
+    private ResponseEntity findRoute(String method, String path) {
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
+        if (config.getMappings().containsKey(method)) {
+            for (Mapping mapping : config.getMappings().get(method)) {
+                if (mapping.getPath().equals(path)) {
+                    return new ResponseEntity<>(mapping.getBody(), HttpStatus.valueOf(mapping.getCode()));
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.valueOf(config.getDefaultCode()));
+    }
+
+    @RequestMapping(value = "**")
+    public ResponseEntity getMethodResponse(HttpServletRequest request) {
+        System.out.println("Requested method: " + request.getMethod() + ", Requested URI: " + request.getRequestURI());
+        return findRoute(request.getMethod(), request.getRequestURI());
     }
 }

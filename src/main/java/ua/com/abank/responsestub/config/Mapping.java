@@ -4,13 +4,16 @@ public class Mapping {
 
     private String path;
     private int code;
-    private String data;
+    private String body;
 
     public String getPath() {
         return path;
     }
 
     void setPath(String path) {
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
         this.path = path;
     }
 
@@ -22,11 +25,11 @@ public class Mapping {
         this.code = code;
     }
 
-    public String getData() {
-        return data;
+    public String getBody() {
+        return body;
     }
 
-    void setData(String data) {
-        this.data = data;
+    void setBody(String body) {
+        this.body = body;
     }
 }

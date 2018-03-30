@@ -1,30 +1,24 @@
 {
-  "port": "3000",
+  "port": 3000,
+  "defaultCode": 200,
   "mappings": {
-    "ALL": [
-      {
-        "path": "/path1",
-        "code": 201,
-        "data": ""
-      }
-    ],
     "GET": [
       {
         "path": "/path2",
         "code": 202,
-        "data": ""
+        "body": ""
       },
       {
         "path": "/path3",
         "code": 203,
-        "data": ""
+        "body": "<tag>some body</tag>"
       }
     ],
     "POST": [
       {
         "path": "/path4",
         "code": 204,
-        "data": ""
+        "body": ""
       }
     ]
   }

@@ -14,19 +14,28 @@ public class Config {
 
     @JsonIgnore
     private ObjectMapper objectMapper;
-    private String port;
+    private int port;
+    private int defaultCode;
     private Map<String, List<Mapping>> mappings;
 
     public Config(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
-    public String getPort() {
+    public int getPort() {
         return port;
     }
 
-    void setPort(String port) {
+    void setPort(int port) {
         this.port = port;
+    }
+
+    public int getDefaultCode() {
+        return defaultCode;
+    }
+
+    void setDefaultCode(int defaultCode) {
+        this.defaultCode = defaultCode;
     }
 
     public Map<String, List<Mapping>> getMappings() {
@@ -41,6 +50,7 @@ public class Config {
     public String toString() {
         ObjectNode resultNode = objectMapper.createObjectNode();
         resultNode.put("port", port);
+        resultNode.put("defaultCode", defaultCode);
         resultNode.putPOJO("mappings", mappings);
         try {
             return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(resultNode);
