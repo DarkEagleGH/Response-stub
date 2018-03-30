@@ -27,7 +27,16 @@ public class AppConfigurer extends SpringBootServletInitializer {
             JsonNode jsonNodeRoot = objectMapper.readTree(new FileInputStream(MAIN_CONFIG));
             config.setPort(jsonNodeRoot.get("port").asText());
             String mappings = jsonNodeRoot.get("mappings").asText();
-            List<Mapping> mappingList;
+//            Map<String, List<Mapping>> mappingMap = Collections.emptyMap();
+            try {
+                config.setMappings(objectMapper.readValue(mappings, new TypeReference<Map<String, List<Mapping>>>() {}));
+            } catch (Exception e) {
+                e.printStackTrace();
+                config.setMappings(Collections.emptyMap());
+            }
+
+
+ /*           List<Mapping> mappingList;
             try {
                 mappingList = objectMapper.readValue(mappings, new TypeReference<List<Mapping>>() {});
             } catch (Exception e) {
@@ -35,10 +44,10 @@ public class AppConfigurer extends SpringBootServletInitializer {
                 mappingList = Collections.emptyList();
             }
             Map<String, Mapping> mappingMap = Collections.emptyMap();
-            for (Mapping mapping: mappingList) {
+            for (Mapping mapping : mappingList) {
                 mappingMap.put(mapping.getPath(), mapping);
             }
-            config.setMappings(mappingMap);
+            config.setMappings(mappingMap);*/
         } catch (IOException e) {
             e.printStackTrace();
         }

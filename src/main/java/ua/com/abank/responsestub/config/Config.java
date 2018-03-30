@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.ByteArrayOutputStream;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -14,7 +16,7 @@ import java.util.Map;
 public class Config {
     private ObjectMapper objectMapper;
     private String port;
-    private Map<String, Mapping> mappings;
+    private Map<String, List<Mapping>> mappings;
 
     public Config(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
@@ -28,11 +30,11 @@ public class Config {
         this.port = port;
     }
 
-    public Map<String, Mapping> getMappings() {
+    public Map<String, List<Mapping>> getMappings() {
         return mappings;
     }
 
-    void setMappings(Map<String, Mapping> mappings) {
+    void setMappings(Map<String, List<Mapping>> mappings) {
         this.mappings = mappings;
     }
 
@@ -45,6 +47,12 @@ public class Config {
             for (Mapping mapping: mappings.values()) {
                 mappingsNode.add(objectMapper.createObjectNode().putPOJO(mapping.getPath(), mapping));
             }
+
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            mapper.writeValue(out, list);
+
+            mappings.forEach((s, mappingsList) -> mappingsList.);
             rootNode.putArray("mappings").addAll(mappingsNode);
             return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNode);
         } catch (JsonProcessingException e) {
