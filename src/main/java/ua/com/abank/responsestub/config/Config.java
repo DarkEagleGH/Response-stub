@@ -1,19 +1,18 @@
 package ua.com.abank.responsestub.config;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
 
 @Configuration
-@JsonAutoDetect
 public class Config {
+
+    @JsonIgnore
     private ObjectMapper objectMapper;
     private String port;
     private Map<String, List<Mapping>> mappings;
@@ -40,21 +39,11 @@ public class Config {
 
     @Override
     public String toString() {
+        ObjectNode resultNode = objectMapper.createObjectNode();
+        resultNode.put("port", port);
+        resultNode.putPOJO("mappings", mappings);
         try {
-            ObjectNode rootNode = objectMapper.createObjectNode();
-            rootNode.put("port", this.port);
-            ArrayNode mappingsNode = objectMapper.createArrayNode();
-            for (Mapping mapping: mappings.values()) {
-                mappingsNode.add(objectMapper.createObjectNode().putPOJO(mapping.getPath(), mapping));
-            }
-
-            final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-            mapper.writeValue(out, list);
-
-            mappings.forEach((s, mappingsList) -> mappingsList.);
-            rootNode.putArray("mappings").addAll(mappingsNode);
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNode);
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(resultNode);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "";
