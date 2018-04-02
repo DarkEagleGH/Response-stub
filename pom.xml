@@ -99,6 +99,8 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <finalName>${artifactId}</finalName>
+                            <outputDirectory>${basedir}/out</outputDirectory>
                             <artifactSet>
                                 <excludes>
                                     <exclude>classworlds:classworlds</exclude>
