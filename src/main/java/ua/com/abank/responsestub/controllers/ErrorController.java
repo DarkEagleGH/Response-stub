@@ -1,5 +1,7 @@
 package ua.com.abank.responsestub.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class ErrorController extends AbstractErrorController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private Config config;
     private final String ERROR_PATH = "/error";
 
@@ -25,6 +28,8 @@ public class ErrorController extends AbstractErrorController {
 
     @RequestMapping(ERROR_PATH)
     public ResponseEntity<?> errorResponse(HttpServletRequest request) {
+        LOGGER.info("Remote host: " + request.getRemoteHost() + ", Requested method: " + request.getMethod()
+                + ", Requested URI: " + request.getRequestURI());
         return new ResponseEntity(HttpStatus.valueOf(config.getDefaultCode()));
     }
 
